@@ -15,6 +15,12 @@ const refs = {
     container: document.querySelector('.container')
 }
 
+let lightbox = new SimpleLightbox(".gallery a", {
+ captionsData: "alt",
+ captionDelay: 250,
+});;
+
+
 const apiService = new ApiService();
 console.log(apiService)
 const loadMoreBtn = new LoadMoreBtn({
@@ -48,6 +54,8 @@ async function onSearch(e) {
     loadMoreBtn.enable()
 
     totalImages(images.totalHits)
+
+   
 }
 
 function onLoadMore() {
@@ -61,7 +69,8 @@ function onLoadMore() {
 }
 
 function uploadImages(images) {
-refs.gallery.insertAdjacentHTML('beforeend', renderImages(images.hits))
+    refs.gallery.insertAdjacentHTML('beforeend', renderImages(images.hits))
+    lightbox.refresh()
 }
 
 function clearGallery() {
