@@ -1,30 +1,56 @@
+import axios from 'axios';
+
+const BASE_URL = 'https://pixabay.com/api/';
+const KEY = '29689577-6dc67b4d31de18bcd5a01035c';
+
+
 export default class ApiService {
     constructor() {
         this.valueForm = '';
         this.page = 1;
-     }
-    
-    fetchArticles() {
-        console.log(this)
-        const options = {
-        headers: {
-            Authorization: '29689577-6dc67b4d31de18bcd5a01035c'
-        },
-        };
-        const url = `https://pixabay.com/api/?q=${this.valueForm}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`;
-
-fetch(url, options)
-    .then(r => r.json())
-    .then(data => {
-        this.page += 1;
-    });
+        this.totalPictures = '';
+        this.pageTotal = ''
     }
     
-    get value() {
-        return this.valueForm;
-    }
+    async fetchArticles() {
+        try {
+            const options = {
+                params: {
+                key: KEY,
+                q: this.valueForm,
+                image_type: 'photo',
+                orientation: 'horizontal',
+                safesearch: true,
+                page: this.page,
+                per_page: 40,
+                }
+            }
+            const response = await axios.get(BASE_URL, options); 
+            
 
-    set value(newValue) {
-        this.valueForm = newValue;
+        this.incrementPage();
+      return await response.data;
+    } catch (error) {
+      console.log(error)
     }
+  }
+
+  resetPage() {
+    this.page = 1;
+  }
+
+  incrementPage() {
+    this.page += 1;
+  }
+  get value() {
+    return this.valueForm;
+  }
+  set value(newValue) {
+    this.valueForm = newValue;
+  }
+  get pictures() {
+    return this.totalPictures;
+  }
+
 }
+
