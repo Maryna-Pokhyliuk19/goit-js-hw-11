@@ -22,7 +22,7 @@ let lightbox = new SimpleLightbox(".gallery a", {
 
 
 const apiService = new ApiService();
-console.log(apiService)
+
 const loadMoreBtn = new LoadMoreBtn({
   selector: '.load-more',
   hidden: true,
@@ -50,12 +50,9 @@ async function onSearch(e) {
         Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
     }
     clearGallery()
+    totalImages(images.totalHits)
     uploadImages(images)
     loadMoreBtn.enable()
-
-    totalImages(images.totalHits)
-
-   
 }
 
 function onLoadMore() {
@@ -64,22 +61,29 @@ function onLoadMore() {
         uploadImages(images)
         loadMoreBtn.enable()
         smoothyScroll()
+        onLoadMoreEnd() 
+        
     })
-    
 }
+
+ function onLoadMoreEnd() {
+        if (apiService.images > apiService.totalHits) {
+        Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`)
+    }
+    loadMoreBtn.hide();
+    return; 
+        }
+    
+
 
 function uploadImages(images) {
     refs.gallery.insertAdjacentHTML('beforeend', renderImages(images.hits))
+    console.log(images)
     lightbox.refresh()
 }
 
 function clearGallery() {
     refs.gallery.innerHTML = ''
-}
-
-function totalImages(totalImages) {
-    refs.container.insertAdjacentHTML('afterbegin', renderTotalImages(totalImages))
-    Notiflix.Notify.success(`Hooray! We found ${totalImages} images.`);
 }
 
 function smoothyScroll() {
@@ -93,6 +97,9 @@ window.scrollBy({
 });
 }
 
+function totalImages(totalImages) {
+    refs.container.insertAdjacentHTML('beforebegin', renderTotalImages(totalImages))
+    Notiflix.Notify.success(`Hooray! We found ${totalImages} images.`);
+}
 
-//     Если пользователь дошел до конца коллекции, пряч кнопку и выводи уведомление с текстом
-// "We're sorry, but you've reached the end of search results.".
+

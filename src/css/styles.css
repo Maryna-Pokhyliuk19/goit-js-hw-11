@@ -17,7 +17,7 @@ body {
     display: flex;
     justify-content: center;
     padding: 8px;
-    margin-bottom: 24px;
+    
     background-color: #36b7b7;
 }
 
@@ -36,10 +36,8 @@ body {
 .gallery {
     display: flex;
     flex-wrap: wrap;
-
-    margin-top: -5px;
-    margin-left: -5px;
 }
+
 .gallery__item {
     margin-top: 5px;
     margin-left: 5px;
