@@ -44,6 +44,7 @@ async function onSearch(e) {
     loadMoreBtn.show()
     loadMoreBtn.disable()
     apiService.resetPage()
+
     const images = await apiService.fetchArticles()
     
     if (images.totalHits === 0) {
@@ -62,17 +63,16 @@ function onLoadMore() {
         loadMoreBtn.enable()
         smoothyScroll()
         onLoadMoreEnd() 
-        
-    })
+        })
 }
-
- function onLoadMoreEnd() {
-        if (apiService.images > apiService.totalHits) {
-        Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`)
+// ! не выводится сообщение
+function onLoadMoreEnd() {
+    if (apiService.images > apiService.pageTotal) {
+        Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
+        return;
     }
     loadMoreBtn.hide();
-    return; 
-        }
+    }
     
 
 
@@ -88,15 +88,16 @@ function clearGallery() {
 
 function smoothyScroll() {
     const { height: cardHeight } = document
-  .querySelector(".gallery")
-  .firstElementChild.getBoundingClientRect();
+    .querySelector(".gallery")
+    .firstElementChild.getBoundingClientRect();
 
 window.scrollBy({
-  top: cardHeight * 2,
-  behavior: "smooth",
+    top: cardHeight * 2,
+    behavior: "smooth",
 });
 }
 
+// !в браузере не отображается текст
 function totalImages(totalImages) {
     refs.container.insertAdjacentHTML('beforebegin', renderTotalImages(totalImages))
     Notiflix.Notify.success(`Hooray! We found ${totalImages} images.`);

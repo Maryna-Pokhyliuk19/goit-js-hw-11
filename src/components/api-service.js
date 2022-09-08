@@ -9,7 +9,7 @@ export default class ApiService {
         this.valueForm = '';
         this.page = 1;
         this.totalPictures = '';
-        this.pageTotal = ''
+        this.pageTotal = '';
     }
     
     async fetchArticles() {
@@ -25,10 +25,11 @@ export default class ApiService {
                 per_page: 40,
                 }
             }
-            const response = await axios.get(BASE_URL, options); 
-            
 
-        this.incrementPage();
+          this.totalPictures += options.params.per_page;
+          const response = await axios.get(BASE_URL, options); 
+          this.pageTotal = response.data.pageTotal
+          this.incrementPage();
       return await response.data;
     } catch (error) {
       console.log(error)
