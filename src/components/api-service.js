@@ -8,8 +8,8 @@ export default class ApiService {
     constructor() {
         this.valueForm = '';
         this.page = 1;
-        this.totalPictures = '';
-        this.pageTotal = '';
+        this.totalPictures = 0;
+        this.pageTotal = null;
     }
     
     async fetchArticles() {
@@ -28,7 +28,7 @@ export default class ApiService {
 
           this.totalPictures += options.params.per_page;
           const response = await axios.get(BASE_URL, options); 
-          this.pageTotal = response.data.pageTotal
+          this.pageTotal = response.data.totalHits
           this.incrementPage();
       return await response.data;
     } catch (error) {
