@@ -67,19 +67,15 @@ function onLoadMore() {
         onLoadMoreEnd() 
         })
 }
-// ! не выводится сообщение
+
 function onLoadMoreEnd() {
     if (apiService.totalPictures >= apiService.pageTotal) {
         Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
         loadMoreBtn.hide();
         return;
-        
+        }
     }
     
-    }
-    
-
-
 function uploadImages(images) {
     refs.gallery.insertAdjacentHTML('beforeend', renderImages(images.hits))
     console.log(images)
@@ -101,9 +97,7 @@ window.scrollBy({
 });
 }
 
-// !в браузере не отображается текст
 function totalImages(totalImages) {
-    // refs.container.insertAdjacentHTML('beforebegin', renderTotalImages(totalImages))
     Notiflix.Notify.success(`Hooray! We found ${totalImages} images.`);
 }
 
