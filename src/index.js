@@ -49,7 +49,9 @@ async function onSearch(e) {
     
     if (images.totalHits === 0) {
         Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
-    }
+        return;
+        }
+    
     clearGallery()
     totalImages(images.totalHits)
     uploadImages(images)
@@ -67,7 +69,7 @@ function onLoadMore() {
 }
 // ! не выводится сообщение
 function onLoadMoreEnd() {
-    if (apiService.images > apiService.pageTotal) {
+    if (apiService.totalPictures >= apiService.pageTotal) {
         Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
         return;
     }
@@ -99,7 +101,7 @@ window.scrollBy({
 
 // !в браузере не отображается текст
 function totalImages(totalImages) {
-    refs.container.insertAdjacentHTML('beforebegin', renderTotalImages(totalImages))
+    // refs.container.insertAdjacentHTML('beforebegin', renderTotalImages(totalImages))
     Notiflix.Notify.success(`Hooray! We found ${totalImages} images.`);
 }
 
