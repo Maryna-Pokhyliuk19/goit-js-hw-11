@@ -5,7 +5,6 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import ApiService from './components/api-service'
 import { renderImages } from './components/renderImages';
 import LoadMoreBtn from './components/load-more-btn';
-import { renderTotalImages } from './components/renderTotalImages';
 import './css/styles.css';
 
 const refs = {
@@ -49,6 +48,7 @@ async function onSearch(e) {
     
     if (images.totalHits === 0) {
         Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
+        loadMoreBtn.hide();
         return;
         }
     
@@ -71,9 +71,11 @@ function onLoadMore() {
 function onLoadMoreEnd() {
     if (apiService.totalPictures >= apiService.pageTotal) {
         Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
+        loadMoreBtn.hide();
         return;
+        
     }
-    loadMoreBtn.hide();
+    
     }
     
 
