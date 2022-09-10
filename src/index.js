@@ -40,7 +40,7 @@ async function onSearch(e) {
         return;
     }
 
-    loadMoreBtn.show()
+    
     loadMoreBtn.disable()
     apiService.resetPage()
 
@@ -56,6 +56,7 @@ async function onSearch(e) {
     totalImages(images.totalHits)
     uploadImages(images)
     loadMoreBtn.enable()
+    onLoadMoreEnd()
 }
 
 function onLoadMore() {
@@ -73,7 +74,8 @@ function onLoadMoreEnd() {
         Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
         loadMoreBtn.hide();
         return;
-        }
+    }
+    loadMoreBtn.show()
     }
     
 function uploadImages(images) {
