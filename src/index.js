@@ -4,14 +4,15 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import ApiService from './components/api-service'
 import { renderImages } from './components/renderImages';
-import LoadMoreBtn from './components/load-more-btn';
+// import LoadMoreBtn from './components/load-more-btn';
 import './css/styles.css';
 
 const refs = {
     searchForm: document.querySelector('#search-form'),
     loadMoreBtn: document.querySelector('.load-more'),
     gallery: document.querySelector('.gallery'),
-    container: document.querySelector('.container')
+    container: document.querySelector('.container'),
+    sentinel: document.querySelector('#sentinel')
 }
 
 let lightbox = new SimpleLightbox(".gallery a", {
@@ -22,13 +23,13 @@ let lightbox = new SimpleLightbox(".gallery a", {
 
 const apiService = new ApiService();
 
-const loadMoreBtn = new LoadMoreBtn({
-  selector: '.load-more',
-  hidden: true,
-});
+// const loadMoreBtn = new LoadMoreBtn({
+//   selector: '.load-more',
+//   hidden: true,
+// });
 
 refs.searchForm.addEventListener('submit', onSearch);
-refs.loadMoreBtn.addEventListener('click', onLoadMore);
+// refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 async function onSearch(e) {
     e.preventDefault();
@@ -48,35 +49,35 @@ async function onSearch(e) {
     
     if (images.totalHits === 0) {
         Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.')
-        loadMoreBtn.hide();
+        // loadMoreBtn.hide();
         return;
         }
     
     clearGallery()
     totalImages(images.totalHits)
     uploadImages(images)
-    loadMoreBtn.enable()
-    onLoadMoreEnd()
+    // loadMoreBtn.enable()
+    // onLoadMoreEnd()
 }
 
-function onLoadMore() {
-    loadMoreBtn.disable()
-    apiService.fetchArticles().then(images => {
-        uploadImages(images)
-        loadMoreBtn.enable()
-        smoothyScroll()
-        onLoadMoreEnd() 
-        })
-}
+// function onLoadMore() {
+//     loadMoreBtn.disable()
+//     apiService.fetchArticles().then(images => {
+//         uploadImages(images)
+//         loadMoreBtn.enable()
+//         smoothyScroll()
+//         onLoadMoreEnd() 
+//         })
+// }
 
-function onLoadMoreEnd() {
-    if (apiService.totalPictures >= apiService.pageTotal) {
-        Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
-        loadMoreBtn.hide();
-        return;
-    }
-    loadMoreBtn.show()
-    }
+// function onLoadMoreEnd() {
+//     if (apiService.totalPictures >= apiService.pageTotal) {
+//         Notiflix.Notify.info(`We're sorry, but you've reached the end of search results.`);
+//         loadMoreBtn.hide();
+//         return;
+//     }
+//     loadMoreBtn.show()
+//     }
     
 function uploadImages(images) {
     refs.gallery.insertAdjacentHTML('beforeend', renderImages(images.hits))
@@ -102,5 +103,21 @@ window.scrollBy({
 function totalImages(totalImages) {
     Notiflix.Notify.success(`Hooray! We found ${totalImages} images.`);
 }
+
+const onEntry = entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && apiService.valueForm !== '') {
+            apiService.fetchArticles().then(images => {
+                uploadImages(images)
+            });
+        }
+    });
+};
+
+const options = {
+    rootMargin: '150px',
+};
+const observer = new IntersectionObserver(onEntry, options);
+observer.observe(refs.sentinel)
 
 
