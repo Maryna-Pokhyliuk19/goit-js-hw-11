@@ -9,7 +9,7 @@ import './css/styles.css';
 
 const refs = {
     searchForm: document.querySelector('#search-form'),
-    loadMoreBtn: document.querySelector('.load-more'),
+    // loadMoreBtn: document.querySelector('.load-more'),
     gallery: document.querySelector('.gallery'),
     container: document.querySelector('.container'),
     sentinel: document.querySelector('#sentinel')
@@ -42,7 +42,7 @@ async function onSearch(e) {
     }
 
     
-    loadMoreBtn.disable()
+    // loadMoreBtn.disable()
     apiService.resetPage()
 
     const images = await apiService.fetchArticles()
